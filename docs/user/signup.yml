@@ -1,0 +1,32 @@
+paths:
+  /auth/signup/:                # path of the user from your endpoint
+    post:                 # endpoint request type (post request)
+      tags:               # Tag property
+        - User            # Value of the tag
+      summary: signs up a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/signup'
+      responses:          # server responses
+        201:
+          description: An object with user details
+components:        # Schema definition for request body
+ schemas:
+  signup:
+    properties:
+          fullName:
+            type: string
+          email:
+            type: string
+          username:
+            type: string
+          password:
+            type: string
+    required:
+      - fullName
+      - email
+      - username
+      - password

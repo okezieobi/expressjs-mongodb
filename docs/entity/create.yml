@@ -1,0 +1,28 @@
+paths:
+  /entities/:                # path of the user from your endpoint
+    post:                 # endpoint request type (post request)
+      tags:               # Tag property
+        - Entry            # Value of the tag
+      summary: creates a diary entity as an authenticated user
+      security:
+       - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/create'
+      responses:          # server responses
+        201:
+          description: An object with entity details
+components:        # Schema definition for request body
+ schemas:
+  create:
+    properties:
+          title:
+            type: string
+          body:
+            type: string
+    required:
+      - title
+      - body
