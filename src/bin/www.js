@@ -11,7 +11,7 @@ import { createServer } from 'http';
 
 import app from '../app';
 
-const debug = require('debug')('expressjs-postgresql:server');
+const debug = require('debug')('expressjs-mongodb:server');
 
 /**
  * Normalize a port into a number, string, or false.

@@ -3,9 +3,9 @@ import jwt from 'jsonwebtoken';
 import env from './env';
 
 export default class JWT {
-  static generate({ id }) {
+  static generate({ _id }) {
     return jwt.sign({
-      id,
+      _id,
     }, env.jwtSecret, {
       expiresIn: 24 * 60 * 60,
     });

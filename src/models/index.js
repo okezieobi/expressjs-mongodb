@@ -1,46 +1,21 @@
 /* eslint-disable no-console */
-import { Sequelize, DataTypes } from 'sequelize';
+import mongoose, { Schema, model } from 'mongoose';
 
-import UserModel from './user';
-import EntityModel from './entity';
+import userSchema from './user';
 import env from '../utils/env';
 
-const sequelize = new Sequelize(env.databaseURL, { ssl: true, dialect: 'postgres', logging: false });
-// pass your sequelize config here
-
-const models = { user: UserModel, entity: EntityModel };
-
-Object.values(models).forEach((model) => model.init(sequelize, DataTypes));
-
-// Run `.associate` if it exists,
-// ie create relationships in the ORM
-Object.values(models)
-  .filter((model) => typeof model.associate === 'function')
-  .forEach((model) => model.associate(models));
-
 (async () => {
-  if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'production') {
-    await sequelize.authenticate();
-  } else {
-    await sequelize.authenticate().then(() => console.log('Database connection successful'));
-    await sequelize.sync({ force: true, match: /dev$/ });
-  }
-  // no sequelize.sync(); use umzug migrations after writing models
+  mongoose.connect(env.databaseURL,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+      useCreateIndex: true,
+    });
+  const db = mongoose.connection;
+  await db.once('open', () => console.log('connected to database'));
 })();
 
-const modelTimestamps = (SequelizeDataTypes) => ({
-  createdAt: {
-    type: SequelizeDataTypes.DATE,
-    defaultValue: SequelizeDataTypes.NOW,
-  },
-  updatedAt: {
-    type: SequelizeDataTypes.DATE,
-    defaultValue: SequelizeDataTypes.NOW,
-  },
-});
-
 export default {
-  ...models,
-  sequelize,
-  modelTimestamps,
+  user: model('User', userSchema(Schema)),
 };

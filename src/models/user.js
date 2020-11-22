@@ -1,96 +1,49 @@
-import { Model, Op } from 'sequelize';
+import bcrypt from '../utils/bcrypt';
 
-import bcryptUtil from '../utils/bcrypt';
-
-export default class User extends Model {
-  static async createOne(user, transaction) {
-    await this.create(user, { transaction });
-    return this.findOne({
-      where: {
-        [Op.and]: [
-          { email: user.email }, { username: user.username },
-        ],
-      },
-      transaction,
-      attributes: {
-        exclude: ['password', 'updatedAt'],
-      },
-    });
-  }
-
-  static async findByUnique({ email, username }, transaction, exclude = []) {
-    return this.findOne({
-      where: {
-        [Op.or]: [
-          { email }, { username },
-        ],
-      },
-      transaction,
-      attributes: {
-        exclude,
-      },
-    });
-  }
-
-  static async findById(id, transaction) {
-    return this.findByPk(id, {
-      transaction,
-      attributes: {
-        exclude: ['password'],
-      },
-    });
-  }
-
-  static schema(DataTypes) {
-    return {
-      id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-      },
-      fullName: {
-        type: DataTypes.STRING(256),
-        allowNull: false,
-        notEmpty: true,
-      },
-      username: {
-        type: DataTypes.STRING(256),
-        allowNull: false,
-        unique: true,
-        notEmpty: true,
-      },
-      email: {
-        type: DataTypes.STRING(256),
-        allowNull: false,
-        unique: true,
-        notEmpty: true,
-        isEmail: true,
-      },
-      password: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        notEmpty: true,
-        set(value) {
-          this.setDataValue('password', bcryptUtil.hashString(value));
-        },
-      },
-      type: {
-        type: DataTypes.TEXT,
-        defaultValue: 'Client',
-        isIn: [['Client', 'Admin']],
-      },
-    };
-  }
-
-  static init(sequelize, DataTypes) {
-    return super.init(
-      {
-        ...this.schema(DataTypes),
-      },
-      {
-        sequelize,
-        modelName: 'User',
-      },
-    );
+class User {
+  static async findByUnique({ email, username }) {
+    return this.findOne({ $or: [{ username }, { email }] });
   }
 }
+
+export default (Schema) => {
+  const schema = new Schema({
+    fullName: {
+      type: String,
+      required: true,
+      length: 128,
+    },
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      length: 128,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      length: 128,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      enum: ['Client', 'Admin'],
+      default: 'Client',
+    },
+  });
+
+  schema.loadClass(User);
+
+  schema.pre('save', function encryptPassword(next) {
+    if (this.isModified('password')) {
+      this.password = bcrypt.hashString(this.password);
+      next();
+    } else next();
+  });
+
+  return schema;
+};

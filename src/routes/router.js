@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import userRoutes from './user';
-import entryRoutes from './entity';
+// import entryRoutes from './entity';
 import middleware from '../middleware';
 import jwt from '../utils/jwt';
 
@@ -18,6 +18,6 @@ const handleResponse = (req, res) => {
 
 router.use('/auth', userRoutes(Router, { handleResponse, middleware }));
 router.use(middleware.user.jwt);
-router.use('/entities', entryRoutes(Router, { handleResponse, middleware }));
+// router.use('/entities', entryRoutes(Router, { handleResponse, middleware }));
 
 export default router;
