@@ -1,11 +1,5 @@
 import bcrypt from '../utils/bcrypt';
 
-class User {
-  static async findByUnique({ email, username }) {
-    return this.findOne({ $or: [{ username }, { email }] });
-  }
-}
-
 export default (Schema) => {
   const schema = new Schema({
     fullName: {
@@ -34,9 +28,7 @@ export default (Schema) => {
       enum: ['Client', 'Admin'],
       default: 'Client',
     },
-  });
-
-  schema.loadClass(User);
+  }, { timestamps: true });
 
   schema.pre('save', function encryptPassword(next) {
     if (this.isModified('password')) {
