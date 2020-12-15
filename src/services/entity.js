@@ -1,36 +1,31 @@
 export default class EntityServices {
-  constructor(models) {
-    this.models = models;
+  constructor({ entity }) {
+    this.model = entity;
   }
 
-  async create(arg) {
-    return this.models.sequelize.transaction(async (t) => {
-      const entity = await this.models.entity.createOne(arg, t);
-      return { entity, status: 201 };
-    });
+  async create({ title, body, userId }) {
+    const entity = await this.model.create({ title, body, userId });
+    return { entity, status: 201 };
   }
 
-  async findByOwner(arg) {
-    return this.models.sequelize.transaction(async (t) => {
-      const entities = await this.models.entity.findAllByOwnerId(arg, t);
-      return { entities, status: 200 };
-    });
+  async findByOwner({ userId }) {
+    const entities = await this.model.find({ userId }, '_id title body createdAt updatedAt', { limit: 10, sort: '-createdAt' });
+    return { entities, status: 200 };
   }
 
-  async findOneByOwner(arg) {
-    return this.models.sequelize.transaction(async (t) => {
-      let data;
-      const entity = await this.models.entity.findOneByOwnerId(arg, t);
-      if (entity) data = { entity, status: 200 };
-      else data = { message: 'Entity not found', status: 404 };
-      return data;
-    });
+  async findOneByOwner({ userId, _id }) {
+    let data;
+    const entity = await this.model.findOne({ $and: [{ userId }, { _id }] }, '_id title body createdAt updatedAt');
+    if (entity) data = { entity, status: 200 };
+    else data = { message: 'Entity not found', status: 404 };
+    return data;
   }
 
-  async updateOne(arg) {
-    return this.models.sequelize.transaction(async (t) => {
-      const entity = await this.models.entity.updateOne(arg, t);
-      return { entity, status: 200 };
-    });
+  async updateOne({
+    userId, title, body, _id,
+  }) {
+    await this.model.updateOne({ $and: [{ userId }, { _id }] }, { title, body });
+    const entity = await this.model.findOne({ $and: [{ userId }, { _id }] }, '_id title body createdAt updatedAt');
+    return { entity, status: 200 };
   }
 }

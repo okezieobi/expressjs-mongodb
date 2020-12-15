@@ -95,7 +95,7 @@ export default class UserSchemas {
 
     this.validateJWT = checkSchema({
       token: {
-        in: ['headers'],
+        in: ['cookies'],
         isString: {
           errorMessage: 'Token must be string data type',
         },

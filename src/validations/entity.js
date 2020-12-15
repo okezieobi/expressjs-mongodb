@@ -34,8 +34,8 @@ export default class EntitySchema {
     this.validateEntryId = checkSchema({
       id: {
         in: ['params'],
-        isUUID: {
-          errorMessage: 'Entity id does not match UUID format',
+        isMongoId: {
+          errorMessage: 'Entity id does not match MongoId format',
         },
       },
     });

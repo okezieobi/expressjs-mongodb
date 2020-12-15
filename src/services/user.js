@@ -13,7 +13,8 @@ export default class UserServices {
     else {
       await this.model.create(arg);
       const user = await this.model
-        .findOne({ $and: [{ username: arg.username }, { email: arg.email }] }, '_id, fullName email username type createdAt');
+        .findOne({ $and: [{ username: arg.username }, { email: arg.email }] },
+          '_id, fullName email username type createdAt').lean();
       data = { user, status: 201 };
     }
     return data;
@@ -27,7 +28,8 @@ export default class UserServices {
       const verifyPassword = await bcrypt.compareString(userExists.password, arg.password);
       if (verifyPassword) {
         const user = await this.model
-          .findOne({ $or: [{ username: arg.user }, { email: arg.user }] }, '_id, fullName email username type createdAt updatedAt');
+          .findOne({ $or: [{ username: arg.user }, { email: arg.user }] },
+            '_id, fullName email username type createdAt updatedAt').lean();
         data = { user, status: 200 };
       } else data = { message: 'Password provided does not match user', status: 401 };
     } else data = { message: 'User not found, please sign up by creating an account', status: 404 };
@@ -36,7 +38,7 @@ export default class UserServices {
 
   async authJWT(arg) {
     let data;
-    const user = await this.model.findById(arg);
+    const user = await this.model.findById(arg).lean();
     if (user) data = { user, status: 200 };
     else data = { message: 'User not found, please sign up by creating an account', status: 401 };
     return data;

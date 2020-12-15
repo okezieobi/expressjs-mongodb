@@ -2,6 +2,7 @@
 import mongoose, { Schema, model } from 'mongoose';
 
 import userSchema from './user';
+import entitySchema from './entity';
 import env from '../utils/env';
 
 (async () => {
@@ -18,4 +19,5 @@ import env from '../utils/env';
 
 export default {
   user: model('User', userSchema(Schema)),
+  entity: model('Entity', entitySchema(Schema)),
 };

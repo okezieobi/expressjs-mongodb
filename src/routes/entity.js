@@ -1,13 +1,18 @@
-export default (Router, { handleResponse, middleware }) => {
+export default (Router, handleResponse,
+  {
+    entity: {
+      createOne, getAll, verifyOne, updateOne,
+    },
+  }) => {
   const router = Router();
 
   router.route('/')
-    .post(middleware.entity.createOne, handleResponse)
-    .get(middleware.entity.getAll, handleResponse);
+    .post(createOne, handleResponse)
+    .get(getAll, handleResponse);
 
-  router.use('/:id', middleware.entity.verifyOne);
+  router.use('/:id', verifyOne);
   router.route('/:id')
-    .put(middleware.entity.updateOne, handleResponse)
+    .put(updateOne, handleResponse)
     .get(handleResponse);
 
   return router;
