@@ -7,8 +7,7 @@ describe('User should be able to signup to the app', () => {
   it('Should create a User at "/api/v1/auth/signup" with POST if all request inputs are valid', async () => {
     const { status, body: { data } } = await request(app).post('/api/v1/auth/signup').send(utils.user.mock);
     expect(status).toBeNumber().toEqual(201);
-    expect(data).toBeObject().toContainKeys(['user', 'status', 'token']);
-    expect(data.token).toBeString();
+    expect(data).toBeObject().toContainKeys(['user', 'status']);
     expect(data.status).toBeNumber().toEqual(201);
     expect(data.user.fullName).toBeString().toEqual(utils.user.mock.fullName);
     expect(data.user.username).toBeString().toEqual(utils.user.mock.username);
@@ -103,8 +102,7 @@ describe('User should be able to login to the app', () => {
   it('Should be able login a User at "/api/v1/auth/login" user and password fields are valid', async () => {
     const { status, body: { data } } = await request(app).post('/api/v1/auth/login').send({ user: utils.user.mock2.email, password: utils.user.mock2.password });
     expect(status).toBeNumber().toEqual(200);
-    expect(data).toBeObject().toContainKeys(['user', 'status', 'token']);
-    expect(data.token).toBeString();
+    expect(data).toBeObject().toContainKeys(['user', 'status']);
     expect(data.status).toBeNumber().toEqual(200);
     expect(data.user.fullName).toBeString().toEqual(utils.user.mock2.fullName);
     expect(data.user.username).toBeString().toEqual(utils.user.mock2.username);

@@ -6,7 +6,7 @@ import utils from './utils';
 describe('Authenticated User should be able to create an entity', () => {
   it('Should be able to create a diary entity at "/api/v1/entities" if all required input fields are valid', async () => {
     const { status, body: { data } } = await request(app).post('/api/v1/entities')
-      .set('token', utils.user.mock2.token).send(utils.entity.mock);
+      .set('Cookie', `token=${utils.user.mock2.token}`).send(utils.entity.mock);
     expect(status).toBeNumber().toEqual(201);
     expect(data).toBeObject().toContainKeys(['entity', 'status']);
     expect(data.status).toBeNumber().toEqual(201);
@@ -20,7 +20,7 @@ describe('Authenticated User should be able to create an entity', () => {
 
   it('Should not create an entity at "/api/v1/entities" if input fields are invalid', async () => {
     const { status, body: { error } } = await request(app).post('/api/v1/entities')
-      .set('token', utils.user.mock2.token);
+      .set('Cookie', `token=${utils.user.mock2.token}`);
     expect(status).toBeNumber().toEqual(400);
     expect(error.messages).toBeArray().toIncludeAllMembers([
       {
@@ -64,24 +64,24 @@ describe('Authenticated User should be able to create an entity', () => {
       {
         msg: 'Token must be string data type',
         param: 'token',
-        location: 'headers',
+        location: 'cookies',
       },
       {
         msg: 'Token does not match Json Web Token format',
         param: 'token',
-        location: 'headers',
+        location: 'cookies',
       },
       {
         msg: 'Token is required',
         param: 'token',
-        location: 'headers',
+        location: 'cookies',
       },
     ]);
   });
 
   it('Should NOT create an entity at at "/api/v1/entities" if User is not authenticated', async () => {
     const { status, body: { error } } = await request(app).post('/api/v1/entities')
-      .set('token', utils.user.mock2.token401).send(utils.entity.mock);
+      .set('Cookie', `token=${utils.user.mock2.token401}`).send(utils.entity.mock);
     expect(status).toBeNumber().toEqual(401);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
     expect(error.message).toBeString().toEqual('User not found, please sign up by creating an account');
@@ -91,7 +91,7 @@ describe('Authenticated User should be able to create an entity', () => {
 describe('Authenticated User should be able to get all associated entities', () => {
   it('Should get all associated entities at "/api/v1/entities" if input all required fields are valid', async () => {
     const { status, body: { data } } = await request(app).get('/api/v1/entities')
-      .set('token', utils.user.mock2.token);
+      .set('Cookie', `token=${utils.user.mock2.token}`);
     expect(status).toBeNumber().toEqual(200);
     expect(data).toBeObject().toContainKeys(['entities', 'status']);
     expect(data.status).toBeNumber().toEqual(200);
@@ -105,24 +105,24 @@ describe('Authenticated User should be able to get all associated entities', () 
       {
         msg: 'Token must be string data type',
         param: 'token',
-        location: 'headers',
+        location: 'cookies',
       },
       {
         msg: 'Token does not match Json Web Token format',
         param: 'token',
-        location: 'headers',
+        location: 'cookies',
       },
       {
         msg: 'Token is required',
         param: 'token',
-        location: 'headers',
+        location: 'cookies',
       },
     ]);
   });
 
   it('Should NOT get all associated entities at at "/api/v1/entities" if User is not authenticated', async () => {
     const { status, body: { error } } = await request(app).get('/api/v1/entities')
-      .set('token', utils.user.mock2.token401);
+      .set('Cookie', `token=${utils.user.mock2.token401}`);
     expect(status).toBeNumber().toEqual(401);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
     expect(error.message).toBeString().toEqual('User not found, please sign up by creating an account');
@@ -132,7 +132,7 @@ describe('Authenticated User should be able to get all associated entities', () 
 describe('Authenticated User can get an associated, specific entity by its id', () => {
   it('Should get a specific entity at "/api/v1/entities/:id" by its id', async () => {
     const { status, body: { data } } = await request(app).get(`/api/v1/entities/${utils.entity.mock.bulkInsert.id}`)
-      .set('token', utils.user.mock2.token);
+      .set('Cookie', `token=${utils.user.mock2.token}`);
     expect(status).toBeNumber().toEqual(200);
     expect(data).toBeObject().toContainKeys(['entity', 'status']);
     expect(data.status).toBeNumber().toEqual(200);
@@ -151,24 +151,24 @@ describe('Authenticated User can get an associated, specific entity by its id', 
       {
         msg: 'Token must be string data type',
         param: 'token',
-        location: 'headers',
+        location: 'cookies',
       },
       {
         msg: 'Token does not match Json Web Token format',
         param: 'token',
-        location: 'headers',
+        location: 'cookies',
       },
       {
         msg: 'Token is required',
         param: 'token',
-        location: 'headers',
+        location: 'cookies',
       },
     ]);
   });
 
   it('Should NOT get associated, specific entities at at "/api/v1/entities/:id" if User is not authenticated', async () => {
     const { status, body: { error } } = await request(app).get(`/api/v1/entities/${utils.entity.mock.bulkInsert.id}`)
-      .set('token', utils.user.mock2.token401);
+      .set('Cookie', `token=${utils.user.mock2.token401}`);
     expect(status).toBeNumber().toEqual(401);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
     expect(error.message).toBeString().toEqual('User not found, please sign up by creating an account');
@@ -176,7 +176,7 @@ describe('Authenticated User can get an associated, specific entity by its id', 
 
   it('Should NOT get associated, specific entities at at "/api/v1/entities/:id" if entity does not exist', async () => {
     const { status, body: { error } } = await request(app).get(`/api/v1/entities/${utils.entity.mock.id404}`)
-      .set('token', utils.user.mock2.token);
+      .set('Cookie', `token=${utils.user.mock2.token}`);
     expect(status).toBeNumber().toEqual(404);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
     expect(error.message).toBeString().toEqual('Entity not found');
@@ -186,7 +186,7 @@ describe('Authenticated User can get an associated, specific entity by its id', 
 describe('Authenticated User can update an associated, specific entity by its id', () => {
   it('Should update a specific entity at "/api/v1/entities:id" if all input fields are valid', async () => {
     const { status, body: { data } } = await request(app).put(`/api/v1/entities/${utils.entity.mock.bulkInsert.id}`)
-      .set('token', utils.user.mock2.token).send(utils.entity.mock2);
+      .set('Cookie', `token=${utils.user.mock2.token}`).send(utils.entity.mock2);
     expect(status).toBeNumber().toEqual(200);
     expect(data).toBeObject().toContainKeys(['entity', 'status']);
     expect(data.status).toBeNumber().toEqual(200);
@@ -201,7 +201,7 @@ describe('Authenticated User can update an associated, specific entity by its id
   // preceding tests affects results here
   it('Should not update a specific entity at "/api/v1/entities:id" if all input fields are not sent', async () => {
     const { status, body: { data } } = await request(app).put(`/api/v1/entities/${utils.entity.mock.bulkInsert.id}`)
-      .set('token', utils.user.mock2.token);
+      .set('Cookie', `token=${utils.user.mock2.token}`);
     expect(status).toBeNumber().toEqual(200);
     expect(data).toBeObject().toContainKeys(['entity', 'status']);
     expect(data.status).toBeNumber().toEqual(200);
@@ -221,24 +221,24 @@ describe('Authenticated User can update an associated, specific entity by its id
       {
         msg: 'Token must be string data type',
         param: 'token',
-        location: 'headers',
+        location: 'cookies',
       },
       {
         msg: 'Token does not match Json Web Token format',
         param: 'token',
-        location: 'headers',
+        location: 'cookies',
       },
       {
         msg: 'Token is required',
         param: 'token',
-        location: 'headers',
+        location: 'cookies',
       },
     ]);
   });
 
   it('Should NOT update associated, specific entities at at "/api/v1/entities/:id" if User is not authenticated', async () => {
     const { status, body: { error } } = await request(app).put(`/api/v1/entities/${utils.entity.mock.bulkInsert.id}`)
-      .set('token', utils.user.mock2.token401);
+      .set('Cookie', `token=${utils.user.mock2.token401}`);
     expect(status).toBeNumber().toEqual(401);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
     expect(error.message).toBeString().toEqual('User not found, please sign up by creating an account');
@@ -246,7 +246,7 @@ describe('Authenticated User can update an associated, specific entity by its id
 
   it('Should NOT update associated, specific entities at at "/api/v1/entities/:id" if entity does not exist', async () => {
     const { status, body: { error } } = await request(app).put(`/api/v1/entities/${utils.entity.mock.id404}`)
-      .set('token', utils.user.mock2.token);
+      .set('Cookie', `token=${utils.user.mock2.token}`);
     expect(status).toBeNumber().toEqual(404);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
     expect(error.message).toBeString().toEqual('Entity not found');

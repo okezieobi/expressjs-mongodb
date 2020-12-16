@@ -1,4 +1,4 @@
-export default (Schema) => {
+export default (Schema, model) => {
   const schema = new Schema({
     title: {
       type: String,
@@ -18,5 +18,5 @@ export default (Schema) => {
     },
   }, { timestamps: true });
 
-  return schema;
+  return model('Entity', schema);
 };

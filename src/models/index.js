@@ -5,7 +5,12 @@ import userSchema from './user';
 import entitySchema from './entity';
 import env from '../utils/env';
 
-(async () => {
+const models = {
+  user: userSchema(Schema, model),
+  entity: entitySchema(Schema, model),
+};
+
+const databaseSetup = async () => {
   mongoose.connect(env.databaseURL,
     {
       useNewUrlParser: true,
@@ -15,9 +20,13 @@ import env from '../utils/env';
     });
   const db = mongoose.connection;
   await db.once('open', () => console.log('connected to database'));
-})();
-
-export default {
-  user: model('User', userSchema(Schema)),
-  entity: model('Entity', entitySchema(Schema)),
 };
+
+if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'production') {
+  databaseSetup();
+} else {
+  databaseSetup();
+  Object.values(models).forEach(async (modelProp) => { await modelProp.deleteMany(); });
+}
+
+export default models;

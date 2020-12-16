@@ -1,38 +1,27 @@
 export default class UserController {
-  constructor({ user }, jwt) {
-    this.services = user;
+  constructor({ user }, handleServiceOutput, jwt) {
+    this.service = user;
     this.login = this.login.bind(this);
     this.signup = this.signup.bind(this);
     this.findById = this.findById.bind(this);
     this.setJWT = this.setJWT.bind(this);
     this.verifyJWT = this.verifyJWT.bind(this);
     this.jwt = jwt;
+    this.handleServiceOutput = handleServiceOutput;
   }
 
   signup({ body }, res, next) {
-    this.services.create(body)
-      .then((data) => {
-        if (data.message) throw data;
-        else {
-          res.locals.data = data;
-          next();
-        }
-      }).catch(next);
+    this.service.create(body)
+      .then((data) => this.handleServiceOutput(data, res, next)).catch(next);
   }
 
   login({ body }, res, next) {
-    this.services.auth({ user: body.user, password: body.password })
-      .then((data) => {
-        if (data.message) throw data;
-        else {
-          res.locals.data = data;
-          next();
-        }
-      }).catch(next);
+    this.service.auth(body)
+      .then((data) => this.handleServiceOutput(data, res, next)).catch(next);
   }
 
-  findById(req, res, next) {
-    this.services.authJWT(res.locals.userId).then((data) => {
+  findById(req, { locals: { userId } }, next) {
+    this.service.authJWT(userId).then((data) => {
       if (data.message) throw data;
       else next();
     }).catch(next);
