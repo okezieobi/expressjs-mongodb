@@ -1,6 +1,6 @@
 import bcrypt from '../utils/bcrypt';
 
-export default (Schema, model) => {
+export default (Schema) => {
   const schema = new Schema({
     fullName: {
       type: String,
@@ -37,5 +37,5 @@ export default (Schema, model) => {
     } else next();
   });
 
-  return model('User', schema);
+  return schema;
 };

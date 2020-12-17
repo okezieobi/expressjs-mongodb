@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import request from 'supertest';
 
 import app from '../app';
@@ -6,21 +7,21 @@ import utils from './utils';
 describe('Authenticated User should be able to create an entity', () => {
   it('Should be able to create a diary entity at "/api/v1/entities" if all required input fields are valid', async () => {
     const { status, body: { data } } = await request(app).post('/api/v1/entities')
-      .set('Cookie', `token=${utils.user.mock2.token}`).send(utils.entity.mock);
+      .set('Cookie', `token=${utils.token}`).send(utils.entity);
     expect(status).toBeNumber().toEqual(201);
     expect(data).toBeObject().toContainKeys(['entity', 'status']);
     expect(data.status).toBeNumber().toEqual(201);
-    expect(data.entity.title).toBeString().toEqual(utils.entity.mock.title);
-    expect(data.entity.body).toBeString().toEqual(utils.entity.mock.body);
-    expect(data.entity.id).toBeString();
-    expect(data.entity.UserId).toBeString();
+    expect(data.entity.title).toBeString().toEqual(utils.entity.title);
+    expect(data.entity.body).toBeString().toEqual(utils.entity.body);
+    expect(data.entity._id).toBeString();
+    expect(data.entity.userId).toBeString();
     expect(data.entity.createdAt).toBeString();
     expect(data.entity.updatedAt).toBeString();
   });
 
   it('Should not create an entity at "/api/v1/entities" if input fields are invalid', async () => {
     const { status, body: { error } } = await request(app).post('/api/v1/entities')
-      .set('Cookie', `token=${utils.user.mock2.token}`);
+      .set('Cookie', `token=${utils.token}`);
     expect(status).toBeNumber().toEqual(400);
     expect(error.messages).toBeArray().toIncludeAllMembers([
       {
@@ -58,7 +59,7 @@ describe('Authenticated User should be able to create an entity', () => {
 
   it('Should not create an entity at "/api/v1/entities" if token is falsy', async () => {
     const { status, body: { error } } = await request(app).post('/api/v1/entities')
-      .send(utils.entity.mock);
+      .send(utils.entity);
     expect(status).toBeNumber().toEqual(400);
     expect(error.messages).toBeArray().toIncludeAllMembers([
       {
@@ -81,7 +82,7 @@ describe('Authenticated User should be able to create an entity', () => {
 
   it('Should NOT create an entity at at "/api/v1/entities" if User is not authenticated', async () => {
     const { status, body: { error } } = await request(app).post('/api/v1/entities')
-      .set('Cookie', `token=${utils.user.mock2.token401}`).send(utils.entity.mock);
+      .set('Cookie', `token=${utils.token401}`).send(utils.entity);
     expect(status).toBeNumber().toEqual(401);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
     expect(error.message).toBeString().toEqual('User not found, please sign up by creating an account');
@@ -91,7 +92,7 @@ describe('Authenticated User should be able to create an entity', () => {
 describe('Authenticated User should be able to get all associated entities', () => {
   it('Should get all associated entities at "/api/v1/entities" if input all required fields are valid', async () => {
     const { status, body: { data } } = await request(app).get('/api/v1/entities')
-      .set('Cookie', `token=${utils.user.mock2.token}`);
+      .set('Cookie', `token=${utils.token}`);
     expect(status).toBeNumber().toEqual(200);
     expect(data).toBeObject().toContainKeys(['entities', 'status']);
     expect(data.status).toBeNumber().toEqual(200);
@@ -122,7 +123,7 @@ describe('Authenticated User should be able to get all associated entities', () 
 
   it('Should NOT get all associated entities at at "/api/v1/entities" if User is not authenticated', async () => {
     const { status, body: { error } } = await request(app).get('/api/v1/entities')
-      .set('Cookie', `token=${utils.user.mock2.token401}`);
+      .set('Cookie', `token=${utils.token401}`);
     expect(status).toBeNumber().toEqual(401);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
     expect(error.message).toBeString().toEqual('User not found, please sign up by creating an account');
@@ -131,21 +132,21 @@ describe('Authenticated User should be able to get all associated entities', () 
 
 describe('Authenticated User can get an associated, specific entity by its id', () => {
   it('Should get a specific entity at "/api/v1/entities/:id" by its id', async () => {
-    const { status, body: { data } } = await request(app).get(`/api/v1/entities/${utils.entity.mock.bulkInsert.id}`)
-      .set('Cookie', `token=${utils.user.mock2.token}`);
+    const { status, body: { data } } = await request(app).get(`/api/v1/entities/${utils.seed.entity._id}`)
+      .set('Cookie', `token=${utils.token}`);
     expect(status).toBeNumber().toEqual(200);
     expect(data).toBeObject().toContainKeys(['entity', 'status']);
     expect(data.status).toBeNumber().toEqual(200);
-    expect(data.entity.title).toBeString().toEqual(utils.entity.mock.title);
-    expect(data.entity.body).toBeString().toEqual(utils.entity.mock.body);
-    expect(data.entity.id).toBeString().toEqual(utils.entity.mock.bulkInsert.id);
-    expect(data.entity.UserId).toBeString();
+    expect(data.entity.title).toBeString().toEqual(utils.entity.title);
+    expect(data.entity.body).toBeString().toEqual(utils.entity.body);
+    expect(data.entity._id).toBeString();
+    expect(data.entity.userId).toBeString();
     expect(data.entity.createdAt).toBeString();
     expect(data.entity.updatedAt).toBeString();
   });
 
   it('Should not get associated, specific entity at "/api/v1/entities/:id" if token is falsy', async () => {
-    const { status, body: { error } } = await request(app).get(`/api/v1/entities/${utils.entity.mock.bulkInsert.id}`);
+    const { status, body: { error } } = await request(app).get(`/api/v1/entities/${utils.seed.entity._id}`);
     expect(status).toBeNumber().toEqual(400);
     expect(error.messages).toBeArray().toIncludeAllMembers([
       {
@@ -167,16 +168,16 @@ describe('Authenticated User can get an associated, specific entity by its id', 
   });
 
   it('Should NOT get associated, specific entities at at "/api/v1/entities/:id" if User is not authenticated', async () => {
-    const { status, body: { error } } = await request(app).get(`/api/v1/entities/${utils.entity.mock.bulkInsert.id}`)
-      .set('Cookie', `token=${utils.user.mock2.token401}`);
+    const { status, body: { error } } = await request(app).get(`/api/v1/entities/${utils.seed.entity._id}`)
+      .set('Cookie', `token=${utils.token401}`);
     expect(status).toBeNumber().toEqual(401);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
     expect(error.message).toBeString().toEqual('User not found, please sign up by creating an account');
   });
 
   it('Should NOT get associated, specific entities at at "/api/v1/entities/:id" if entity does not exist', async () => {
-    const { status, body: { error } } = await request(app).get(`/api/v1/entities/${utils.entity.mock.id404}`)
-      .set('Cookie', `token=${utils.user.mock2.token}`);
+    const { status, body: { error } } = await request(app).get(`/api/v1/entities/${utils.id404}`)
+      .set('Cookie', `token=${utils.token}`);
     expect(status).toBeNumber().toEqual(404);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
     expect(error.message).toBeString().toEqual('Entity not found');
@@ -185,37 +186,37 @@ describe('Authenticated User can get an associated, specific entity by its id', 
 
 describe('Authenticated User can update an associated, specific entity by its id', () => {
   it('Should update a specific entity at "/api/v1/entities:id" if all input fields are valid', async () => {
-    const { status, body: { data } } = await request(app).put(`/api/v1/entities/${utils.entity.mock.bulkInsert.id}`)
-      .set('Cookie', `token=${utils.user.mock2.token}`).send(utils.entity.mock2);
+    const { status, body: { data } } = await request(app).put(`/api/v1/entities/${utils.seed.entity._id}`)
+      .set('Cookie', `token=${utils.token}`).send(utils.entity);
     expect(status).toBeNumber().toEqual(200);
     expect(data).toBeObject().toContainKeys(['entity', 'status']);
     expect(data.status).toBeNumber().toEqual(200);
-    expect(data.entity.title).toBeString().toEqual(utils.entity.mock2.title);
-    expect(data.entity.body).toBeString().toEqual(utils.entity.mock2.body);
-    expect(data.entity.id).toBeString();
-    expect(data.entity.UserId).toBeString();
+    expect(data.entity.title).toBeString().toEqual(utils.entity.title);
+    expect(data.entity.body).toBeString().toEqual(utils.entity.body);
+    expect(data.entity._id).toBeString();
+    expect(data.entity.userId).toBeString();
     expect(data.entity.createdAt).toBeString();
     expect(data.entity.updatedAt).toBeString();
   });
 
   // preceding tests affects results here
   it('Should not update a specific entity at "/api/v1/entities:id" if all input fields are not sent', async () => {
-    const { status, body: { data } } = await request(app).put(`/api/v1/entities/${utils.entity.mock.bulkInsert.id}`)
-      .set('Cookie', `token=${utils.user.mock2.token}`);
+    const { status, body: { data } } = await request(app).put(`/api/v1/entities/${utils.seed.entity._id}`)
+      .set('Cookie', `token=${utils.token}`);
     expect(status).toBeNumber().toEqual(200);
     expect(data).toBeObject().toContainKeys(['entity', 'status']);
     expect(data.status).toBeNumber().toEqual(200);
-    expect(data.entity.title).toBeString().toEqual(utils.entity.mock2.title);
-    expect(data.entity.body).toBeString().toEqual(utils.entity.mock2.body);
-    expect(data.entity.id).toBeString();
-    expect(data.entity.UserId).toBeString();
+    expect(data.entity.title).toBeString().toEqual(utils.entity.title);
+    expect(data.entity.body).toBeString().toEqual(utils.entity.body);
+    expect(data.entity._id).toBeString();
+    expect(data.entity.userId).toBeString();
     expect(data.entity.createdAt).toBeString();
     expect(data.entity.updatedAt).toBeString();
   });
 
   it('Should not update associated, specific entity at "/api/v1/entities/:id" if token is falsy', async () => {
-    const { status, body: { error } } = await request(app).put(`/api/v1/entities/${utils.entity.mock.bulkInsert.id}`)
-      .send(utils.entity.mock2);
+    const { status, body: { error } } = await request(app).put(`/api/v1/entities/${utils.seed.entity._id}`)
+      .send(utils.entity);
     expect(status).toBeNumber().toEqual(400);
     expect(error.messages).toBeArray().toIncludeAllMembers([
       {
@@ -237,16 +238,16 @@ describe('Authenticated User can update an associated, specific entity by its id
   });
 
   it('Should NOT update associated, specific entities at at "/api/v1/entities/:id" if User is not authenticated', async () => {
-    const { status, body: { error } } = await request(app).put(`/api/v1/entities/${utils.entity.mock.bulkInsert.id}`)
-      .set('Cookie', `token=${utils.user.mock2.token401}`);
+    const { status, body: { error } } = await request(app).put(`/api/v1/entities/${utils.seed.entity._id}`)
+      .set('Cookie', `token=${utils.token401}`);
     expect(status).toBeNumber().toEqual(401);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
     expect(error.message).toBeString().toEqual('User not found, please sign up by creating an account');
   });
 
   it('Should NOT update associated, specific entities at at "/api/v1/entities/:id" if entity does not exist', async () => {
-    const { status, body: { error } } = await request(app).put(`/api/v1/entities/${utils.entity.mock.id404}`)
-      .set('Cookie', `token=${utils.user.mock2.token}`);
+    const { status, body: { error } } = await request(app).put(`/api/v1/entities/${utils.id404}`)
+      .set('Cookie', `token=${utils.token}`);
     expect(status).toBeNumber().toEqual(404);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
     expect(error.message).toBeString().toEqual('Entity not found');

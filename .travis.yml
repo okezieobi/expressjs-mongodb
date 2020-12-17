@@ -2,15 +2,13 @@ language: node_js
 node_js:
 - stable
 services:
-  - postgresql
+  - mongodb
 addons:
-  postgresql: "9.5"
+  postgresql: "latest"
 cache:
   directories:
   - node_modules
 before_script:
 - npm install
-- psql -c 'DROP DATABASE IF EXISTS test;' -U postgres
-- psql -c 'CREATE DATABASE test;' -U postgres
 script:
 - npm run coverage:coveralls

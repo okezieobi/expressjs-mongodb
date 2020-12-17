@@ -1,4 +1,4 @@
-export default (Schema, model) => {
+export default (Schema) => {
   const schema = new Schema({
     title: {
       type: String,
@@ -8,7 +8,6 @@ export default (Schema, model) => {
     body: {
       type: String,
       required: true,
-      unique: true,
       length: 512,
     },
     userId: {
@@ -18,5 +17,5 @@ export default (Schema, model) => {
     },
   }, { timestamps: true });
 
-  return model('Entity', schema);
+  return schema;
 };

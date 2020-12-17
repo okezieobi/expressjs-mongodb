@@ -1,8 +1,8 @@
 import bcrypt from '../utils/bcrypt';
 
 export default class UserServices {
-  constructor({ user }) {
-    this.model = user;
+  constructor({ User }) {
+    this.model = User;
   }
 
   async create(arg) {
