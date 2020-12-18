@@ -30,4 +30,5 @@ export default {
   user404,
   user404Doc,
   token401,
+  models,
 };

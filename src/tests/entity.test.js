@@ -132,7 +132,7 @@ describe('Authenticated User should be able to get all associated entities', () 
 
 describe('Authenticated User can get an associated, specific entity by its id', () => {
   it('Should get a specific entity at "/api/v1/entities/:id" by its id', async () => {
-    const { status, body: { data } } = await request(app).get(`/api/v1/entities/${utils.seed.entity._id}`)
+    const { status, body: { data } } = await request(app).get(`/api/v1/entities/${utils.seed.entityDoc._id}`)
       .set('Cookie', `token=${utils.token}`);
     expect(status).toBeNumber().toEqual(200);
     expect(data).toBeObject().toContainKeys(['entity', 'status']);
@@ -146,7 +146,7 @@ describe('Authenticated User can get an associated, specific entity by its id', 
   });
 
   it('Should not get associated, specific entity at "/api/v1/entities/:id" if token is falsy', async () => {
-    const { status, body: { error } } = await request(app).get(`/api/v1/entities/${utils.seed.entity._id}`);
+    const { status, body: { error } } = await request(app).get(`/api/v1/entities/${utils.seed.entityDoc._id}`);
     expect(status).toBeNumber().toEqual(400);
     expect(error.messages).toBeArray().toIncludeAllMembers([
       {
@@ -168,7 +168,7 @@ describe('Authenticated User can get an associated, specific entity by its id', 
   });
 
   it('Should NOT get associated, specific entities at at "/api/v1/entities/:id" if User is not authenticated', async () => {
-    const { status, body: { error } } = await request(app).get(`/api/v1/entities/${utils.seed.entity._id}`)
+    const { status, body: { error } } = await request(app).get(`/api/v1/entities/${utils.seed.entityDoc._id}`)
       .set('Cookie', `token=${utils.token401}`);
     expect(status).toBeNumber().toEqual(401);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
@@ -176,7 +176,7 @@ describe('Authenticated User can get an associated, specific entity by its id', 
   });
 
   it('Should NOT get associated, specific entities at at "/api/v1/entities/:id" if entity does not exist', async () => {
-    const { status, body: { error } } = await request(app).get(`/api/v1/entities/${utils.id404}`)
+    const { status, body: { error } } = await request(app).get(`/api/v1/entities/${utils.seed.userDoc._id}`)
       .set('Cookie', `token=${utils.token}`);
     expect(status).toBeNumber().toEqual(404);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
@@ -186,7 +186,7 @@ describe('Authenticated User can get an associated, specific entity by its id', 
 
 describe('Authenticated User can update an associated, specific entity by its id', () => {
   it('Should update a specific entity at "/api/v1/entities:id" if all input fields are valid', async () => {
-    const { status, body: { data } } = await request(app).put(`/api/v1/entities/${utils.seed.entity._id}`)
+    const { status, body: { data } } = await request(app).put(`/api/v1/entities/${utils.seed.entityDoc._id}`)
       .set('Cookie', `token=${utils.token}`).send(utils.entity);
     expect(status).toBeNumber().toEqual(200);
     expect(data).toBeObject().toContainKeys(['entity', 'status']);
@@ -201,7 +201,7 @@ describe('Authenticated User can update an associated, specific entity by its id
 
   // preceding tests affects results here
   it('Should not update a specific entity at "/api/v1/entities:id" if all input fields are not sent', async () => {
-    const { status, body: { data } } = await request(app).put(`/api/v1/entities/${utils.seed.entity._id}`)
+    const { status, body: { data } } = await request(app).put(`/api/v1/entities/${utils.seed.entityDoc._id}`)
       .set('Cookie', `token=${utils.token}`);
     expect(status).toBeNumber().toEqual(200);
     expect(data).toBeObject().toContainKeys(['entity', 'status']);
@@ -215,7 +215,7 @@ describe('Authenticated User can update an associated, specific entity by its id
   });
 
   it('Should not update associated, specific entity at "/api/v1/entities/:id" if token is falsy', async () => {
-    const { status, body: { error } } = await request(app).put(`/api/v1/entities/${utils.seed.entity._id}`)
+    const { status, body: { error } } = await request(app).put(`/api/v1/entities/${utils.seed.entityDoc._id}`)
       .send(utils.entity);
     expect(status).toBeNumber().toEqual(400);
     expect(error.messages).toBeArray().toIncludeAllMembers([
@@ -238,7 +238,7 @@ describe('Authenticated User can update an associated, specific entity by its id
   });
 
   it('Should NOT update associated, specific entities at at "/api/v1/entities/:id" if User is not authenticated', async () => {
-    const { status, body: { error } } = await request(app).put(`/api/v1/entities/${utils.seed.entity._id}`)
+    const { status, body: { error } } = await request(app).put(`/api/v1/entities/${utils.seed.entityDoc._id}`)
       .set('Cookie', `token=${utils.token401}`);
     expect(status).toBeNumber().toEqual(401);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
@@ -246,7 +246,7 @@ describe('Authenticated User can update an associated, specific entity by its id
   });
 
   it('Should NOT update associated, specific entities at at "/api/v1/entities/:id" if entity does not exist', async () => {
-    const { status, body: { error } } = await request(app).put(`/api/v1/entities/${utils.id404}`)
+    const { status, body: { error } } = await request(app).put(`/api/v1/entities/${utils.seed.userDoc._id}`)
       .set('Cookie', `token=${utils.token}`);
     expect(status).toBeNumber().toEqual(404);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
