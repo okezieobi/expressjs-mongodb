@@ -24,7 +24,6 @@ jobs:
       with:
         mongodb-version: ${{ matrix.mongodb-version }}
     - run: npm ci
-    - run:  sudo service mongodb start
     - run: npm run coverage:codacy
       env:
         TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
