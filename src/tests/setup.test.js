@@ -7,8 +7,8 @@ import utils from './utils';
 beforeAll(async () => {
   await models.Entity.deleteMany();
   await models.User.deleteMany();
-  await utils.seed.user.save();
-  await utils.seed.entity.save();
+  await utils.seed.userDoc.save();
+  await utils.seed.entityDoc.save();
 });
 
 afterAll(async () => {

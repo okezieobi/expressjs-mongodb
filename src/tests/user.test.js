@@ -5,13 +5,13 @@ import utils from './utils';
 
 describe('User should be able to signup to the app', () => {
   it('Should create a User at "/api/v1/auth/signup" with POST if all request inputs are valid', async () => {
-    const { status, body: { data } } = await request(app).post('/api/v1/auth/signup').send(utils.user);
+    const { status, body: { data } } = await request(app).post('/api/v1/auth/signup').send(utils.newUser);
     expect(status).toBeNumber().toEqual(201);
     expect(data).toBeObject().toContainKeys(['user', 'status']);
     expect(data.status).toBeNumber().toEqual(201);
-    expect(data.user.fullName).toBeString().toEqual(utils.user.fullName);
-    expect(data.user.username).toBeString().toEqual(utils.user.username);
-    expect(data.user.email).toBeString().toEqual(utils.user.email);
+    expect(data.user.fullName).toBeString().toEqual(utils.newUser.fullName);
+    expect(data.user.username).toBeString().toEqual(utils.newUser.username);
+    expect(data.user.email).toBeString().toEqual(utils.newUser.email);
     expect(data.user.type).toBeString().toEqual('Client');
     expect(data.user.createdAt).toBeString();
   });
@@ -91,7 +91,7 @@ describe('User should be able to signup to the app', () => {
   });
 
   it('Should NOT create a User at "/api/v1/auth/signup" if username or email is already registered', async () => {
-    const { status, body: { error } } = await request(app).post('/api/v1/auth/signup').send(utils.seed.user);
+    const { status, body: { error } } = await request(app).post('/api/v1/auth/signup').send(utils.user);
     expect(status).toBeNumber().toEqual(406);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
     expect(error.message).toBeString().toEqual('User already exists with either email or username, please sign in');
@@ -151,7 +151,7 @@ describe('User should be able to login to the app', () => {
   });
 
   it('Should NOT login a User at "/api/v1/auth/login" if user is not registered', async () => {
-    const { status, body: { error } } = await request(app).post('/api/v1/auth/login').send({ user: 'fake-user', password: utils.user.password });
+    const { status, body: { error } } = await request(app).post('/api/v1/auth/login').send({ user: utils.user404.email || utils.user404.username, password: utils.user.password });
     expect(status).toBeNumber().toEqual(404);
     expect(error).toBeObject().toContainKeys(['message', 'status']);
     expect(error.message).toBeString().toEqual('User not found, please sign up by creating an account');
