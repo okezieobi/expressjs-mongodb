@@ -16,6 +16,7 @@ mongoose.connect(env.databaseURL,
     useFindAndModify: false,
     useCreateIndex: true,
   });
+
 const db = mongoose.connection;
 
 const databaseSetup = async () => {
