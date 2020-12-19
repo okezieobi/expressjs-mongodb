@@ -5,7 +5,7 @@ paths:
         - Entry            # Value of the tag
       summary: gets a specific, associated entity of an authenticated user
       security:
-       - ApiKeyAuth: []
+       - cookieAuth: []
       parameters:
         - name: id
           in: path

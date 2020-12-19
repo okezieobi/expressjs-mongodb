@@ -5,7 +5,7 @@ paths:
         - Entry            # Value of the tag
       summary: updates a specific, associated entity of an authenticated user
       security:
-       - ApiKeyAuth: []
+       - cookieAuth: []
       requestBody:
         required: true
         content:
@@ -21,7 +21,7 @@ paths:
             type: uuid
       responses:          # server responses
         200:
-          description: An object with entity details
+          description: An object with updated entity details
 components:        # Schema definition for request body
  schemas:
   update:

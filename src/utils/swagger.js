@@ -13,9 +13,9 @@ const swaggerDefinition = {
   ],
   components: {
     securitySchemes: {
-      ApiKeyAuth: {
+      cookieAuth: {
         type: 'apiKey',
-        in: 'header',
+        in: 'cookie',
         name: 'token',
       },
     },

@@ -12,7 +12,10 @@ paths:
               $ref: '#/components/schemas/signup'
       responses:          # server responses
         201:
-          description: An object with user details
+          description: An object with user details in response body and Json Web Token set in response cookie
+          headers:
+            Set-Cookie:
+              type: string
 components:        # Schema definition for request body
  schemas:
   signup:

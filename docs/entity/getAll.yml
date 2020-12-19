@@ -5,7 +5,7 @@ paths:
         - Entry            # Value of the tag
       summary: gets all associated entities of an authenticated user
       security:
-       - ApiKeyAuth: []
+       - cookieAuth: []
       responses:          # server responses
         200:
           description: An object with an array entities
