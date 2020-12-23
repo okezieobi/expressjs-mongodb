@@ -1,4 +1,4 @@
-import express, { json, urlencoded } from 'express';
+import express, { Router, json, urlencoded } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
@@ -16,7 +16,7 @@ app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
-app.use('/api/v1', routes);
+app.use('/api/v1', routes(Router));
 
 // eslint-disable-next-line no-unused-vars
 app.use((error, req, res, next) => {

@@ -13,7 +13,7 @@
     "build": "npm run clean && npm run build-app",
     "build-app": "babel src -s -d dist --presets=@babel/env",
     "start": "node dist/bin/www.js",
-    "test": "NODE_ENV=test jest --runInBand src/tests/index.test.js",
+    "test": "NODE_ENV=test jest -- '--runInBand' src/tests/index.test.js",
     "coverage": "npm run test -- '--coverage'",
     "coverage:coveralls": "npm run coverage && coveralls < coverage/lcov.info",
     "coverage:codacy": "npm run coverage && cp -R coverage .github/workflows/coverage/"
