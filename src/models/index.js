@@ -22,7 +22,7 @@ const databaseSetup = async () => {
   await db.once('open', () => console.log('connected to database'));
 };
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'production') {
   databaseSetup();
 } else {
   databaseSetup();
