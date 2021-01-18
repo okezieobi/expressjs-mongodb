@@ -16,3 +16,5 @@ paths:
       responses:          # server responses
         200:
           description: An object with entity details
+        401:
+            description: Error message object in error property of response body

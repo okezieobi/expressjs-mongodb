@@ -9,7 +9,7 @@ const swaggerDefinition = {
   },
   servers: [
     { url: '', description: 'Deployed server on Heroku' },
-    { url: 'http://localhost:3000/api/v1', description: 'Local development/testing server' },
+    { url: 'http://localhost:5000/api/v1', description: 'Local development/testing server' },
   ],
   components: {
     securitySchemes: {
@@ -28,6 +28,7 @@ const options = {
   swaggerDefinition,
   // path to the API docs
   apis: ['./docs/**/*.yml'],
+  withCredentials: true,
 };
 // initialize swagger-jsdoc
 export default swaggerJSDoc(options);
