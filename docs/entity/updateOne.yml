@@ -22,6 +22,10 @@ paths:
       responses:          # server responses
         200:
           description: An object with updated entity details
+        401:
+            description: Error message object in error property of response body
+        400:
+            description: Error message object in error property of response body
 components:        # Schema definition for request body
  schemas:
   update:
