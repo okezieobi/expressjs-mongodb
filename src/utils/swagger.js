@@ -1,4 +1,5 @@
 import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUI from 'swagger-ui-express';
 
 const swaggerDefinition = {
   openapi: '3.0.0',
@@ -31,4 +32,7 @@ const options = {
   withCredentials: true,
 };
 // initialize swagger-jsdoc
-export default swaggerJSDoc(options);
+export default {
+  setup: swaggerUI.setup(swaggerJSDoc(options)),
+  serve: swaggerUI.serve,
+};
