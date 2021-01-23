@@ -4,8 +4,8 @@ export default class UserSchemas {
       user: {
         in: ['body'],
         isLength: {
-          errorMessage: 'Email or username should be at most 256 characters long',
-          options: { min: 1, max: 256 },
+          errorMessage: 'Email or username should be at least a character long',
+          options: { min: 1 },
         },
         isString: {
           errorMessage: 'Email or username must be string data type',
@@ -18,7 +18,7 @@ export default class UserSchemas {
       password: {
         in: ['body'],
         isLength: {
-          errorMessage: 'Password should be at least 1 character long',
+          errorMessage: 'Password should be at least a character long',
           options: { min: 1 },
         },
         isString: {
@@ -35,8 +35,8 @@ export default class UserSchemas {
       username: {
         in: ['body'],
         isLength: {
-          errorMessage: 'Username should be at most 256 characters long',
-          options: { min: 1, max: 256 },
+          errorMessage: 'Username should be at least a character long',
+          options: { min: 1 },
         },
         isString: {
           errorMessage: 'Username must be string data type',
@@ -49,8 +49,8 @@ export default class UserSchemas {
       fullName: {
         in: ['body'],
         isLength: {
-          errorMessage: 'Full name should be at most 256 characters long',
-          options: { min: 1, max: 256 },
+          errorMessage: 'Full name should be at least a character long',
+          options: { min: 1 },
         },
         isString: {
           errorMessage: 'Full name must be string data type',
@@ -63,8 +63,8 @@ export default class UserSchemas {
       email: {
         in: ['body'],
         isLength: {
-          errorMessage: 'Email should be at most 256 characters long',
-          options: { min: 1, max: 256 },
+          errorMessage: 'Email should be at least a character long',
+          options: { min: 1 },
         },
         isString: {
           errorMessage: 'Email must be string data type',
@@ -80,8 +80,8 @@ export default class UserSchemas {
       password: {
         in: ['body'],
         isLength: {
-          errorMessage: 'Password should be at least 1 character long',
-          options: { min: 1, max: 256 },
+          errorMessage: 'Password should be at least a character long',
+          options: { min: 1 },
         },
         isString: {
           errorMessage: 'Password must be string data type',

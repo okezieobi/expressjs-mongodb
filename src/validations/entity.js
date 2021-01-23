@@ -4,7 +4,7 @@ export default class EntitySchema {
       title: {
         in: ['body'],
         isLength: {
-          errorMessage: 'Entity title should be at most 256 characters long',
+          errorMessage: 'Entity title should be at least a character long',
           options: { min: 1, max: 256 },
         },
         isString: {
@@ -18,7 +18,7 @@ export default class EntitySchema {
       body: {
         in: ['body'],
         isLength: {
-          errorMessage: 'Entity body should be at least 1 character long',
+          errorMessage: 'Entity body should be at least a character long',
           options: { min: 1 },
         },
         isString: {

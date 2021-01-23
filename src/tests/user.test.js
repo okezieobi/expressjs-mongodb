@@ -23,7 +23,7 @@ describe('User should be able to signup to the app', () => {
     expect(error.status).toBeNumber().toEqual(400);
     expect(error.messages).toBeArray().toIncludeAllMembers([
       {
-        msg: 'Username should be at most 256 characters long',
+        msg: 'Username should be at least a character long',
         param: 'username',
         location: 'body',
       },
@@ -38,7 +38,7 @@ describe('User should be able to signup to the app', () => {
         location: 'body',
       },
       {
-        msg: 'Full name should be at most 256 characters long',
+        msg: 'Full name should be at least a character long',
         param: 'fullName',
         location: 'body',
       },
@@ -53,7 +53,7 @@ describe('User should be able to signup to the app', () => {
         location: 'body',
       },
       {
-        msg: 'Email should be at most 256 characters long',
+        msg: 'Email should be at least a character long',
         param: 'email',
         location: 'body',
       },
@@ -73,7 +73,7 @@ describe('User should be able to signup to the app', () => {
         location: 'body',
       },
       {
-        msg: 'Password should be at least 1 character long',
+        msg: 'Password should be at least a character long',
         param: 'password',
         location: 'body',
       },
@@ -118,7 +118,7 @@ describe('User should be able to login to the app', () => {
     expect(error).toBeObject().toContainKeys(['messages', 'status']);
     expect(error.messages).toBeArray().toIncludeAllMembers([
       {
-        msg: 'Email or username should be at most 256 characters long',
+        msg: 'Email or username should be at least a character long',
         param: 'user',
         location: 'body',
       },
@@ -133,7 +133,7 @@ describe('User should be able to login to the app', () => {
         location: 'body',
       },
       {
-        msg: 'Password should be at least 1 character long',
+        msg: 'Password should be at least a character long',
         param: 'password',
         location: 'body',
       },

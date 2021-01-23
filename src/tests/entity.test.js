@@ -25,7 +25,7 @@ describe('Authenticated User should be able to create an entity', () => {
     expect(status).toBeNumber().toEqual(400);
     expect(error.messages).toBeArray().toIncludeAllMembers([
       {
-        msg: 'Entity title should be at most 256 characters long',
+        msg: 'Entity title should be at least a character long',
         param: 'title',
         location: 'body',
       },
@@ -40,7 +40,7 @@ describe('Authenticated User should be able to create an entity', () => {
         location: 'body',
       },
       {
-        msg: 'Entity body should be at least 1 character long',
+        msg: 'Entity body should be at least a character long',
         param: 'body',
         location: 'body',
       },
