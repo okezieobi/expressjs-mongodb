@@ -16,7 +16,7 @@ export default {
   user: {
     signup: [userSchema.validateSignup, handleValidationErr()],
     login: [userSchema.validateLogin, handleValidationErr()],
-    jwt: [userSchema.validateJWT, handleValidationErr()],
+    jwt: [userSchema.validateJWT, handleValidationErr(401)],
   },
   entity: {
     create: [entitySchema.validateInput, handleValidationErr()],
