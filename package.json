@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "dev": "DEBUG=expressjs-mongodb:* nodemon --exec babel-node src/bin/www.js",
+    "dev": "NODE_ENV=development DEBUG=expressjs-mongodb:* nodemon --exec babel-node src/bin/www.js",
     "release": "npm run clean && npm run build-app && npm run start",
     "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && npm run build-app",
