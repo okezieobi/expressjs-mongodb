@@ -10,22 +10,22 @@ export default class EntityController {
   }
 
   createOne({ body: { title, body } }, res, next) {
-    return this.handleServices(this.service, 'create', { title, body, UserId: res.locals.user._id }, res, next);
+    return this.handleServices(this.service, 'create', { title, body, userId: res.locals.user._id }, res, next);
   }
 
   findAll(req, res, next) {
-    return this.handleServices(this.service, 'findByOwner', res.locals.user._id, res, next);
+    return this.handleServices(this.service, 'findByOwner', { userId: res.locals.user._id }, res, next);
   }
 
   findOneById({ params: { id } }, res, next) {
-    return this.handleServices(this.service, 'findOneByOwner', { UserId: res.locals.user._id, _id: id }, res, next);
+    return this.handleServices(this.service, 'findOneByOwner', { userId: res.locals.user._id, _id: id }, res, next);
   }
 
   updateOne({ body: { title, body } }, res, next) {
     const input = {
       title: title || res.locals.data.entity.title,
       body: body || res.locals.data.entity.body,
-      UserId: res.locals.user._id,
+      userId: res.locals.user._id,
       _id: res.locals.data.entity._id,
     };
     return this.handleServices(this.service, 'updateOne', input, res, next);

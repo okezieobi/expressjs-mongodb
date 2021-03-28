@@ -10,12 +10,12 @@ export default class EntityServices {
   }
 
   async findByOwner({ userId }) {
-    const entities = await this.model.find({ userId }, '_id title body createdAt userId updatedAt', { limit: 10, sort: '-createdAt' });
+    const entities = await this.model.find({ userId }, '_id title body createdAt userId updatedAt', { limit: 10, sort: '-createdAt' }).lean();
     return { entities };
   }
 
   async findOneByOwner({ userId, _id }) {
-    const entity = await this.model.findOne({ $and: [{ userId }, { _id }] }, '_id title userId body createdAt updatedAt');
+    const entity = await this.model.findOne({ $and: [{ userId }, { _id }] }, '_id title userId body createdAt updatedAt').lean();
     if (entity === null) throw new this.CustomErr(404, 'Entity not found');
     return { entity };
   }
@@ -24,7 +24,7 @@ export default class EntityServices {
     userId, title, body, _id,
   }) {
     await this.model.updateOne({ $and: [{ userId }, { _id }] }, { title, body });
-    const entity = await this.model.findOne({ $and: [{ userId }, { _id }] }, '_id title userId body createdAt updatedAt');
+    const entity = await this.model.findOne({ $and: [{ userId }, { _id }] }, '_id title userId body createdAt updatedAt').lean();
     return { entity };
   }
 }

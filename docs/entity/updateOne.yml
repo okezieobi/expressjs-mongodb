@@ -12,13 +12,16 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/update'
+            example:
+              title: 'I am a title'
+              body: 'I am a body'
       parameters:
         - name: id
           in: path
           required: true
           description: The id of diary entity to be updated.
           schema:
-            type: uuid
+            type: string
       responses:          # server responses
         200:
           description: An object with updated entity details

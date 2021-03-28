@@ -10,6 +10,9 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/login'
+            example:
+              user: 'username-example'
+              password: 'password-example'
       responses:          # server responses
          200:
           description: User details object in data property of response body and a Json Web Token set in response cookie

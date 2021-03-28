@@ -12,6 +12,9 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/create'
+            example:
+              title: 'I am a title'
+              body: 'I am a body'
       responses:          # server responses
         201:
           description: An object with entity details

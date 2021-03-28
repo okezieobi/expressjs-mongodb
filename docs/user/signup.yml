@@ -10,6 +10,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/signup'
+            example:
+              fullName: 'full name example'
+              email: 'example@email.io'
+              username: 'username-example'
+              password: 'password-example'
       responses:          # server responses
         201:
           description: User details object in data property in response body and Json Web Token set in response cookie.
