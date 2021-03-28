@@ -34,5 +34,6 @@ export default (Schema) => {
     } else next();
   });
 
+  schema.statics.comparePassword = (hashedPassword = '', password = '') => bcrypt.compareString(hashedPassword, password);
   return schema;
 };

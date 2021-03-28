@@ -1,46 +1,36 @@
-import bcrypt from '../utils/bcrypt';
-
 export default class UserServices {
-  constructor({ User }) {
+  constructor({ User }, CustomErr) {
     this.model = User;
+    this.CustomErr = CustomErr;
   }
 
   async create(arg) {
-    let data;
     const userExists = await this.model
       .exists({ $or: [{ username: arg.username }, { email: arg.email }] });
-    if (userExists) data = { message: 'User already exists with either email or username, please sign in', status: 406 };
-    else {
-      await this.model.create(arg);
-      const user = await this.model
-        .findOne({ $and: [{ username: arg.username }, { email: arg.email }] },
-          '_id, fullName email username type createdAt').lean();
-      data = { user, status: 201 };
-    }
-    return data;
+    if (userExists) throw new this.CustomErr(406, `Account already exists with either email ${arg.email} or username ${arg.username}, please sign in or sign up with a different email or username`);
+    await this.model.create(arg);
+    const user = await this.model
+      .findOne({ $and: [{ username: arg.username }, { email: arg.email }] },
+        '_id, fullName email username type createdAt').lean();
+    return { user, status: 201 };
   }
 
   async auth(arg) {
-    let data;
     const userExists = await this.model
       .findOne({ $or: [{ username: arg.user }, { email: arg.user }] }, 'password');
     if (userExists) {
-      const verifyPassword = await bcrypt.compareString(userExists.password, arg.password);
-      if (verifyPassword) {
-        const user = await this.model
-          .findOne({ $or: [{ username: arg.user }, { email: arg.user }] },
-            '_id, fullName email username type createdAt updatedAt').lean();
-        data = { user, status: 200 };
-      } else data = { message: 'Password provided does not match user', status: 401 };
-    } else data = { message: 'User not found, please sign up by creating an account', status: 404 };
-    return data;
+      const verifyPassword = await this.model.compareString(userExists.password, arg.password);
+      if (!verifyPassword) throw new this.CustomErr(401, 'Password provided does not match user');
+    } else throw new this.CustomErr(404, `Account with ${arg.user} does not exist, please sign up by creating an account`);
+    const user = await this.model
+      .findOne({ $or: [{ username: arg.user }, { email: arg.user }] },
+        '_id, fullName email username type createdAt updatedAt').lean();
+    return { user };
   }
 
   async authJWT(arg) {
-    let data;
     const user = await this.model.findById(arg).lean();
-    if (user) data = { user, status: 200 };
-    else data = { message: 'User not found, please sign up by creating an account', status: 401 };
-    return data;
+    if (user === null) throw new this.CustomErr(401, 'User not found, please sign up by creating an account');
+    return user;
   }
 }

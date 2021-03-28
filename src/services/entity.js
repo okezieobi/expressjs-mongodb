@@ -1,6 +1,7 @@
 export default class EntityServices {
-  constructor({ Entity }) {
+  constructor({ Entity }, CustomErr) {
     this.model = Entity;
+    this.CustomErr = CustomErr;
   }
 
   async create({ title, body, userId }) {
@@ -10,15 +11,13 @@ export default class EntityServices {
 
   async findByOwner({ userId }) {
     const entities = await this.model.find({ userId }, '_id title body createdAt userId updatedAt', { limit: 10, sort: '-createdAt' });
-    return { entities, status: 200 };
+    return { entities };
   }
 
   async findOneByOwner({ userId, _id }) {
-    let data;
     const entity = await this.model.findOne({ $and: [{ userId }, { _id }] }, '_id title userId body createdAt updatedAt');
-    if (entity) data = { entity, status: 200 };
-    else data = { message: 'Entity not found', status: 404 };
-    return data;
+    if (entity === null) throw new this.CustomErr(404, 'Entity not found');
+    return { entity };
   }
 
   async updateOne({
@@ -26,6 +25,6 @@ export default class EntityServices {
   }) {
     await this.model.updateOne({ $and: [{ userId }, { _id }] }, { title, body });
     const entity = await this.model.findOne({ $and: [{ userId }, { _id }] }, '_id title userId body createdAt updatedAt');
-    return { entity, status: 200 };
+    return { entity };
   }
 }

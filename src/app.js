@@ -19,7 +19,7 @@ app.use('/api/v1', routes(Router));
 
 // eslint-disable-next-line no-unused-vars
 app.use((error, req, res, next) => {
-  if (error.status) res.status(error.status).send({ error });
+  if (error.status) res.status(error.status).send({ error: error.message });
   else throw error;
 });
 
