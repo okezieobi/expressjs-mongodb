@@ -6,7 +6,7 @@ import EntitySchema from './entity';
 const handleValidationErr = (status = 400) => (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) next();
-  else next({ messages: errors.array(), status });
+  else next({ message: errors.array(), status });
 };
 
 const userSchema = new UserSchema(checkSchema);
