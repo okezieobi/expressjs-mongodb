@@ -61,19 +61,21 @@ export default {
     },
 
     validatePassword: {
-      in: ['body'],
-      isLength: {
-        errorMessage: 'Password should be at least a character long',
-        options: { min: 1 },
+      password: {
+        in: ['body'],
+        isLength: {
+          errorMessage: 'Password should be at least a character long',
+          options: { min: 1 },
+        },
+        isString: {
+          errorMessage: 'Password must be string data type',
+        },
+        exists: {
+          errorMessage: 'Password is required',
+          options: { checkFalsy: true },
+        },
       },
-      isString: {
-        errorMessage: 'Password must be string data type',
-      },
-      exists: {
-        errorMessage: 'Password is required',
-        options: { checkFalsy: true },
-      },
-    },
+    }
 
     validateJWT: {
       token: {
