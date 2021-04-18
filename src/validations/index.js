@@ -1,7 +1,7 @@
 import { validationResult, checkSchema } from 'express-validator';
 
-import UserSchema from './user';
-import EntitySchema from './entity';
+import userSchema from './user';
+import entitySchema from './entity';
 
 const handleValidationErr = (status = 400) => (req, res, next) => {
   const errors = validationResult(req);
@@ -9,17 +9,15 @@ const handleValidationErr = (status = 400) => (req, res, next) => {
   else next({ message: errors.array(), status });
 };
 
-const userSchema = new UserSchema(checkSchema);
-const entitySchema = new EntitySchema(checkSchema);
 
 export default {
   user: {
-    signup: [userSchema.validateSignup, handleValidationErr()],
-    login: [userSchema.validateLogin, handleValidationErr()],
-    jwt: [userSchema.validateJWT, handleValidationErr(401)],
+    signup: [checkSchema({ ...userSchema.validateSignup, ...userSchema.validatePassword ...userSchema.validateLogin}), handleValidationErr()],
+    login: [checkSchema({...userSchema.validateLogin, ...userSchema.validatePassword}), handleValidationErr()],
+    jwt: [checkSchema({...userSchema.validateJWT}), handleValidationErr(401)],
   },
   entity: {
-    create: [entitySchema.validateInput, handleValidationErr()],
-    id: [entitySchema.validateEntryId, handleValidationErr()],
+    create: [checkSchema({...entitySchema.validateInput}), handleValidationErr()],
+    id: [checkSchema({ ...entitySchema.validateEntryId}), handleValidationErr()],
   },
 };

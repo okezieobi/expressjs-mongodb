@@ -1,6 +1,5 @@
-export default class UserSchemas {
-  constructor(checkSchema) {
-    this.validateLogin = checkSchema({
+export default {
+    validateLogin: {
       user: {
         in: ['body'],
         isLength: {
@@ -15,23 +14,9 @@ export default class UserSchemas {
           options: { checkFalsy: true },
         },
       },
-      password: {
-        in: ['body'],
-        isLength: {
-          errorMessage: 'Password should be at least a character long',
-          options: { min: 1 },
-        },
-        isString: {
-          errorMessage: 'Password must be string data type',
-        },
-        exists: {
-          errorMessage: 'Password is required',
-          options: { checkFalsy: true },
-        },
-      },
-    });
+    },
 
-    this.validateSignup = checkSchema({
+    validateSignup: {
       username: {
         in: ['body'],
         isLength: {
@@ -73,23 +58,24 @@ export default class UserSchemas {
           options: { checkFalsy: true },
         },
       },
-      password: {
-        in: ['body'],
-        isLength: {
-          errorMessage: 'Password should be at least a character long',
-          options: { min: 1 },
-        },
-        isString: {
-          errorMessage: 'Password must be string data type',
-        },
-        exists: {
-          errorMessage: 'Password is required',
-          options: { checkFalsy: true },
-        },
-      },
-    });
+    },
 
-    this.validateJWT = checkSchema({
+    validatePassword: {
+      in: ['body'],
+      isLength: {
+        errorMessage: 'Password should be at least a character long',
+        options: { min: 1 },
+      },
+      isString: {
+        errorMessage: 'Password must be string data type',
+      },
+      exists: {
+        errorMessage: 'Password is required',
+        options: { checkFalsy: true },
+      },
+    },
+
+    validateJWT: {
       token: {
         in: ['headers'],
         isString: {
@@ -103,6 +89,5 @@ export default class UserSchemas {
           errorMessage: 'Token does not match Json Web Token format',
         },
       },
-    });
-  }
+    },
 }

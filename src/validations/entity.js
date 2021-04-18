@@ -1,6 +1,5 @@
-export default class EntitySchema {
-  constructor(checkSchema) {
-    this.validateInput = checkSchema({
+export default {
+    validateInput: {
       title: {
         in: ['body'],
         isLength: {
@@ -29,15 +28,14 @@ export default class EntitySchema {
           options: { checkFalsy: true },
         },
       },
-    });
+    },
 
-    this.validateEntryId = checkSchema({
+    validateEntryId: {
       id: {
         in: ['params'],
         isMongoId: {
           errorMessage: 'Entity id does not match MongoId format',
         },
       },
-    });
-  }
+    },
 }
