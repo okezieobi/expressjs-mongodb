@@ -75,7 +75,7 @@ export default {
           options: { checkFalsy: true },
         },
       },
-    }
+    },
 
     validateJWT: {
       token: {
