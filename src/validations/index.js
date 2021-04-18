@@ -12,7 +12,7 @@ const handleValidationErr = (status = 400) => (req, res, next) => {
 
 export default {
   user: {
-    signup: [checkSchema({ ...userSchema.validateSignup, ...userSchema.validatePassword ...userSchema.validateLogin}), handleValidationErr()],
+    signup: [checkSchema({ ...userSchema.validateSignup, ...userSchema.validatePassword, ...userSchema.validateLogin}), handleValidationErr()],
     login: [checkSchema({...userSchema.validateLogin, ...userSchema.validatePassword}), handleValidationErr()],
     jwt: [checkSchema({...userSchema.validateJWT}), handleValidationErr(401)],
   },
