@@ -3,8 +3,7 @@ import UserController from './user';
 import EntityController from './entity';
 
 const handleServices = async (service, method, input, res, next) => {
-  const data = await service[method](input).catch(next);
-  res.locals.data = data;
+  res.locals.data = await service[method](input).catch(next);
   next();
 };
 
